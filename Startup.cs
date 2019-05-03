@@ -37,6 +37,7 @@ namespace server
           options.UseSqlServer(Configuration.GetConnectionString("DispenserDatabase"));
       });
       services.AddTransient<DbService>();
+      // Setup cors policy
       services.AddCors(options => {
         options.AddDefaultPolicy(builder => {
           builder.WithOrigins(
