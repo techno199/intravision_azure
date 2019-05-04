@@ -15,10 +15,14 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-- task: DotNetCoreCLI@2
+- task: AzureRmWebAppDeployment@4
   inputs:
-    command: 'publish'
-    publishWebProjects: true
-    feedsToUse: 'select'
-    versioningScheme: 'off'
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Бесплатная пробная версия (e4384d65-2fd1-4efa-be81-1b4feb246bd6)'
+    appType: 'webApp'
+    WebAppName: 'Intravision'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'IntravisionGroup'
+    SlotName: 'staging'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
