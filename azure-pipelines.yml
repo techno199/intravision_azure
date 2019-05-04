@@ -25,5 +25,5 @@ steps:
     feedsToUse: 'select'
     versioningScheme: 'off'
     zipAfterPublish: true
-
+- task: PublishBuildArtifacts@1
 
