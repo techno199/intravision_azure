@@ -13,6 +13,7 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- script: 'echo $(Build.ArtifactStagingDirectory)'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
