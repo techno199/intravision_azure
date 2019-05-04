@@ -25,5 +25,6 @@ steps:
     feedsToUse: 'select'
     versioningScheme: 'off'
     zipAfterPublish: true
-- task: PublishBuildArtifacts@1
+    arguments: '--configuration $(BuildConfiguration) --output 
+      $(Build.ArtifactStagingDirectory)/backend'
 
