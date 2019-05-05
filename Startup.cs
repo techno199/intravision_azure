@@ -23,21 +23,31 @@ namespace server
 {
   public class Startup
   {
-    public Startup(IConfiguration configuration)
+    public Startup(IConfiguration configuration, IHostingEnvironment env)
     {
       Configuration = configuration;
+      _env = env;
     }
 
     public IConfiguration Configuration { get; }
+    private IHostingEnvironment _env;
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddDbContext<Context>(options => {
+        if (_env.IsDevelopment())
+        {
           options.UseSqlServer(Configuration.GetConnectionString("DispenserDatabase"));
+        }
+        else
+        {
+          options.UseSqlServer(Configuration["ConnectionStringProd"]);
+        }
       });
+   
       services.AddTransient<DbService>();
-      // Setup cors policy
+      
       services.AddCors(options => {
         options.AddDefaultPolicy(builder => {
           builder.WithOrigins(
@@ -48,8 +58,10 @@ namespace server
           builder.AllowAnyHeader();
         });
       });
+
       services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie();
+
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
       string appRoot = AppContext.BaseDirectory;
@@ -57,8 +69,11 @@ namespace server
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env, Context context)
     {
+      // Setup database if not created
+      context.Database.Migrate();
+
       if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
