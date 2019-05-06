@@ -76,5 +76,34 @@ namespace server.Controllers
     {
       _dbService.ChangeCoinAmount(coinId, amount);
     }
+
+    // In real world this method must be authorized and secured
+    [HttpGet]
+    [Route("[action]")]
+    public async Task<ActionResult<List<Coin>>> GrabChange(
+      [FromQuery]int deviceId,
+      [FromQuery]int change)
+    {
+      try
+      {
+        var coins = await _dbService.GrabChange(deviceId, change);
+        if (coins == null)
+        {
+          return BadRequest("No device was found");
+        }
+
+        // Temp workaround for lazy loading
+        foreach (var coin in coins)
+        {
+          coin.Device = null;
+        }
+
+        return coins;
+      }
+      catch
+      {
+        return BadRequest("An error occured while trying to pick up change");
+      }
+    }
   }
 }

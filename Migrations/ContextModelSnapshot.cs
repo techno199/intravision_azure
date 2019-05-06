@@ -29,9 +29,11 @@ namespace server.Migrations
 
                     b.Property<bool>("IsBlocked");
 
-                    b.Property<int>("Quantity");
+                    b.Property<int>("Quantity")
+                        .IsConcurrencyToken();
 
-                    b.Property<int>("Value");
+                    b.Property<int>("Value")
+                        .IsConcurrencyToken();
 
                     b.HasKey("Id");
 
@@ -63,9 +65,11 @@ namespace server.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("Price");
+                    b.Property<int>("Price")
+                        .IsConcurrencyToken();
 
-                    b.Property<int>("Quantity");
+                    b.Property<int>("Quantity")
+                        .IsConcurrencyToken();
 
                     b.HasKey("Id");
 

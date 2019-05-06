@@ -70,7 +70,7 @@ namespace server.Services
       return target;
     } 
 
-    public async void BuyDrink(int drinkId, int amount)
+    public async Task BuyDrink(int drinkId, int amount)
     {
       var drink = await _context.Drinks.FindAsync(drinkId);
       if (drink.Quantity == 0)
@@ -119,7 +119,7 @@ namespace server.Services
       return null;
     }
 
-    public async void DeleteCoin(int coinId)
+    public async Task DeleteCoin(int coinId)
     {
       _context.Coins
         .Remove(
@@ -128,11 +128,51 @@ namespace server.Services
       await _context.SaveChangesAsync();
     }
 
-    public async void ChangeCoinAmount(int coinId, int amount)
+    public async Task ChangeCoinAmount(int coinId, int amount)
     {
-      var coin = _context.Coins.Find(coinId);
+      var coin = await _context.Coins.FindAsync(coinId);
       coin.Quantity += amount;
       await _context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Pick up change for given cash.
+    /// </summary>
+    /// <param name="deviceId">device id</param>
+    /// <param name="change">change to pick up</param>
+    /// <returns>New coin state</returns>
+    public async Task<List<Coin>> GrabChange(int deviceId, int change)
+    {
+      var device = await _context.Devices.FindAsync(deviceId);
+      // Return null if no devices found
+      if (device == null)
+      {
+        return null;
+      }
+
+      var coins = await _context.Entry(device)
+        .Collection(d => d.Coins)
+        .Query()
+        .OrderByDescending(c => c.Value)
+        .ToListAsync();
+
+      foreach (var coin in device.Coins)
+      {
+        var requiredQuantity = Math.Min(
+          coin.Quantity,
+          (int)Math.Floor((decimal)change / coin.Value));
+
+        coin.Quantity -= requiredQuantity;
+        change -= requiredQuantity * coin.Value;
+
+        if (change == 0)
+        {
+          await _context.SaveChangesAsync();
+          return coins;
+        }
+      }
+
+      throw new Exception("Can't pick up change");
     }
   }
 }
