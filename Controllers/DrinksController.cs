@@ -66,12 +66,12 @@ namespace server.Controllers
 
     [HttpGet]
     [Route("[action]")]
-    public void BuyDrink(
+    public async Task BuyDrink(
         [FromQuery]int drinkId,
         [FromQuery]int amount
     )
     {
-        _dbService.BuyDrink(drinkId, amount);
+        await _dbService.BuyDrink(drinkId, amount);
     }
   }
 }

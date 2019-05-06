@@ -60,21 +60,21 @@ namespace server.Controllers
 
     [HttpDelete]
     [Authorize]
-    public void Delete(
+    public async Task Delete(
       [FromQuery]int coinId
     )
     {
-      _dbService.DeleteCoin(coinId);
+      await _dbService.DeleteCoin(coinId);
     }
 
     [HttpGet]
     [Route("[action]")]
-    public void ChangeAmount(
+    public async Task ChangeAmount(
       [FromQuery]int coinId,
       [FromQuery]int amount
     )
     {
-      _dbService.ChangeCoinAmount(coinId, amount);
+      await _dbService.ChangeCoinAmount(coinId, amount);
     }
 
     // In real world this method must be authorized and secured
