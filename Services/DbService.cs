@@ -107,7 +107,7 @@ namespace server.Services
     {
       var target = await _context.Coins
         .FirstAsync(c => c.Id == coin.Id);
-      if (target == null)
+      if (target != null)
       {
         target.Value = coin.Value;
         target.Quantity = coin.Quantity;
