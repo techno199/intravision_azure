@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.IO;
 using Microsoft.DotNet.PlatformAbstractions;
+using Microsoft.AspNetCore.Http;
 
 namespace server
 {
@@ -61,7 +62,10 @@ namespace server
       });
 
       services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie();
+        .AddCookie(options =>
+        {
+          options.Cookie.SameSite = SameSiteMode.Lax;
+        });
 
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
