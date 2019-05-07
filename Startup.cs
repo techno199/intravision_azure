@@ -51,8 +51,9 @@ namespace server
       services.AddCors(options => {
         options.AddDefaultPolicy(builder => {
           builder.WithOrigins(
-            "http://localhost:80",
-            "http://localhost:4200"
+            "http://localhost:80", // local postman
+            "http://localhost:4200", // local dev client
+            "https://intravision-client.azurewebsites.net/" // prod client
           ).AllowCredentials();
           builder.AllowAnyMethod();
           builder.AllowAnyHeader();
