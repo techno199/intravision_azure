@@ -64,7 +64,7 @@ namespace server
       services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
         {
-          options.Cookie.SameSite = SameSiteMode.Lax;
+          options.Cookie.Domain = ".azurewebsites.net";
         });
 
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
