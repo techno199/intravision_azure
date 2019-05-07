@@ -62,10 +62,7 @@ namespace server
       });
 
       services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie(options =>
-        {
-          options.Cookie.Domain = ".azurewebsites.net";
-        });
+        .AddCookie();
 
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
