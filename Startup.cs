@@ -52,8 +52,8 @@ namespace server
       services.AddCors(options => {
         options.AddDefaultPolicy(builder => {
           builder.WithOrigins(
-            "http://localhost:80", // local postman
-            "http://localhost:4200", // local dev client
+            "http://localhost:80", // dev postman
+            "http://localhost:4200", // dev client
             "https://intravision-client.azurewebsites.net/" // prod client
           ).AllowCredentials();
           builder.AllowAnyMethod();
@@ -62,12 +62,7 @@ namespace server
       });
 
       services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie(options => {
-          if (_env.IsProduction())
-          {
-            options.Cookie.Domain = "intravision.azurewebsites.net";
-          }
-        });
+        .AddCookie();
 
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -95,8 +90,8 @@ namespace server
       app.UseHttpsRedirection();
       app.UseDefaultFiles();
       app.UseStaticFiles();
-      app.UseAuthentication();
       app.UseCors();
+      app.UseAuthentication();
       app.UseMvc(routes => {
         routes.MapRoute("default", "api/{controller}/{action}");
       });
