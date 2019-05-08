@@ -62,7 +62,10 @@ namespace server
       });
 
       services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie();
+        .AddCookie(options =>
+        {
+          options.Cookie.SameSite = SameSiteMode.None;
+        });
 
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
