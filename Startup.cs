@@ -62,7 +62,12 @@ namespace server
       });
 
       services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie();
+        .AddCookie(options => {
+          if (_env.IsProduction())
+          {
+            options.Cookie.Domain = "intravision.azurewebsites.net";
+          }
+        });
 
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
