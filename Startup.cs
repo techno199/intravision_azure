@@ -91,11 +91,12 @@ namespace server
         app.UseHsts();
       }
 
+      
       app.UseHttpsRedirection();
       app.UseDefaultFiles();
       app.UseStaticFiles();
-      app.UseCors();
       app.UseAuthentication();
+      app.UseCors();
       app.UseMvc(routes => {
         routes.MapRoute("default", "api/{controller}/{action}");
       });
