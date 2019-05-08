@@ -64,7 +64,7 @@ namespace server
       services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
         {
-          options.Cookie.SameSite = SameSiteMode.None;
+          options.Cookie.SameSite = SameSiteMode.None; // Very important. Allows separation of API and SPA servers.
         });
 
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -91,8 +91,6 @@ namespace server
 
       
       app.UseHttpsRedirection();
-      app.UseDefaultFiles();
-      app.UseStaticFiles();
       app.UseCors();
       app.UseAuthentication();
       app.UseMvc(routes => {
